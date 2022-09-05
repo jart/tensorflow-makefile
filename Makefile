@@ -25,7 +25,7 @@
 
 .UNSANDBOXED = 1
 
-COMPILATION_MODE = opt
+COMPILATION_MODE = ape
 TARGET_CPU = k8
 ANDROID_CPU = armeabi
 
@@ -37,7 +37,7 @@ CPP = $(CC) -E
 CXX = c++
 DWP = dwp
 FPIC = -fPIC
-FPIE = -fPIE
+FPIE = -fno-pie
 GCC = gcc
 GCOV = gcov
 GCOVTOOL = gcov-tool
@@ -67,27 +67,62 @@ CFLAGS.fastbuild = -g0 -O0
 CPPFLAGS.fastbuild =
 CXXFLAGS.fastbuild = $(CFLAGS.fastbuild)
 LDFLAGS.fastbuild = -Wl,-S
+LDLIBS.fastbuild =
 
 CFLAGS.dbg = -g
 CPPFLAGS.dbg =
 CXXFLAGS.dbg = $(CFLAGS.dbg)
 LDFLAGS.dbg =
+LDLIBS.dbg =
 
 CFLAGS.opt = -g0 -O2 -ffunction-sections -fdata-sections
 CPPFLAGS.opt = -DNDEBUG
 CXXFLAGS.opt = $(CFLAGS.opt)
 LDFLAGS.opt = -Wl,--gc-sections
+LDLIBS.opt =
+
+CFLAGS.ape = \
+	-g0 \
+	-O2 \
+	-fno-omit-frame-pointer \
+	-fdata-sections \
+	-ffunction-sections \
+	-pg -mnop-mcount \
+	-mno-tls-direct-seg-refs
+CPPFLAGS.ape = \
+	-DNDEBUG \
+	-nostdinc \
+	-iquote ../cosmo \
+	-isystem ../cosmo/libc/isystem \
+	-include libc/integral/normalize.inc
+CXXFLAGS.ape = \
+	$(CFLAGS.ape)
+LDFLAGS.ape = \
+	-static \
+	-no-pie \
+	-nostdlib \
+	-fuse-ld=bfd \
+	-Wl,--gc-sections \
+	-Wl,--oformat=binary \
+	-Wl,-T,../cosmo/o/ape/ape.lds \
+	../cosmo/o/ape/ape-no-modify-self.o \
+	../cosmo/o/libc/crt/crt.o
+LDLIBS.ape = \
+	../cosmo/o/third_party/libcxx/libcxx.a \
+	../cosmo/o/cosmopolitan.a
 
 CFLAGS.global =
 CPPFLAGS.global = $(CPPFLAGS.determinism)
 CXXFLAGS.global = -std=c++11
 LDFLAGS.global =
+LDLIBS.global =
 
 ifeq ($(COMPILATION_MODE),fastbuild)
   CFLAGS.default = $(CFLAGS.global) $(CFLAGS.fastbuild)
   CPPFLAGS.default = $(CPPFLAGS.global) $(CPPFLAGS.fastbuild)
   CXXFLAGS.default = $(CXXFLAGS.global) $(CXXFLAGS.fastbuild)
   LDFLAGS.default = $(LDFLAGS.global) $(LDFLAGS.fastbuild)
+  LDLIBS.default = $(LDLIBS.global) $(LDLIBS.fastbuild)
 endif
 
 ifeq ($(COMPILATION_MODE),dbg)
@@ -95,6 +130,7 @@ ifeq ($(COMPILATION_MODE),dbg)
   CPPFLAGS.default = $(CPPFLAGS.global) $(CPPFLAGS.dbg)
   CXXFLAGS.default = $(CXXFLAGS.global) $(CXXFLAGS.dbg)
   LDFLAGS.default = $(LDFLAGS.global) $(LDFLAGS.dbg)
+  LDLIBS.default = $(LDLIBS.global) $(LDLIBS.dbg)
 endif
 
 ifeq ($(COMPILATION_MODE),opt)
@@ -102,12 +138,22 @@ ifeq ($(COMPILATION_MODE),opt)
   CPPFLAGS.default = $(CPPFLAGS.global) $(CPPFLAGS.opt)
   CXXFLAGS.default = $(CXXFLAGS.global) $(CXXFLAGS.opt)
   LDFLAGS.default = $(LDFLAGS.global) $(LDFLAGS.opt)
+  LDLIBS.default = $(LDLIBS.global) $(LDLIBS.opt)
+endif
+
+ifeq ($(COMPILATION_MODE),ape)
+  CFLAGS.default = $(CFLAGS.global) $(CFLAGS.ape)
+  CPPFLAGS.default = $(CPPFLAGS.global) $(CPPFLAGS.ape)
+  CXXFLAGS.default = $(CXXFLAGS.global) $(CXXFLAGS.ape)
+  LDFLAGS.default = $(LDFLAGS.global) $(LDFLAGS.ape)
+  LDLIBS.default = $(LDLIBS.global) $(LDLIBS.ape)
 endif
 
 CFLAGS = $(CFLAGS.default)
 CPPFLAGS = $(CPPFLAGS.default)
 CXXFLAGS = $(CXXFLAGS.default)
 LDFLAGS = $(LDFLAGS.default)
+LDLIBS = $(LDLIBS.default)
 
 ################################################################################
 # @bazel_tools//tools/cpp:stl
@@ -3295,10 +3341,11 @@ jpeg/simd/jsimdcfg.inc:
 ################################################################################
 # @nasm//:nasm
 
-nasm_nasm_CFLAGS = -w -std=c99
+nasm_nasm_CFLAGS = -w
 
 nasm_nasm_CPPFLAGS = \
 	-DHAVE_SNPRINTF \
+	-DHAVE_VSNPRINTF \
 	-DHAVE_SYS_TYPES_H \
 	-isystem nasm/asm \
 	-isystem nasm/include \

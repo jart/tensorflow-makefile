@@ -1,0 +1,1 @@
+/home/jart/tensorflow/tensorflow/core/util/strided_slice_op.cc

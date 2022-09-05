@@ -1,0 +1,1 @@
+/home/jart/tensorflow/tensorflow/core/ops/resource_variable_ops.cc

@@ -1,0 +1,1 @@
+/home/jart/tensorflow/tensorflow/contrib/cloud/ops/bigquery_reader_ops.cc

@@ -1,1 +1,8 @@
-/home/jart/tensorflow/tensorflow/core/protobuf/transport_options.proto
+syntax = "proto3";
+
+package tensorflow;
+
+// Extra data needed on a non-RDMA RecvBufResponse.
+message RecvBufRespExtra {
+  bytes tensor_content = 1;
+};

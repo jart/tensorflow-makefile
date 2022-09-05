@@ -1,1 +1,2 @@
-/home/jart/.cache/bazel/_bazel_jart/a233e4cfa495b66524bfaa62f9e360cd/external/jemalloc/src/spin.c
+#define	JEMALLOC_SPIN_C_
+#include "jemalloc/internal/jemalloc_internal.h"

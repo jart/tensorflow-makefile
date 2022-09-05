@@ -1,1 +1,13 @@
-/home/jart/.cache/bazel/_bazel_jart/a233e4cfa495b66524bfaa62f9e360cd/external/jpeg/win/jconfigint.h.in
+#define VERSION "@VERSION@"
+#define BUILD "@BUILD@"
+#define PACKAGE_NAME "@CMAKE_PROJECT_NAME@"
+
+#ifndef INLINE
+#if defined(__GNUC__)
+#define INLINE inline __attribute__((always_inline))
+#elif defined(_MSC_VER)
+#define INLINE __forceinline
+#else
+#define INLINE
+#endif
+#endif

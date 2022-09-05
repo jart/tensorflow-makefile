@@ -1,1 +1,8 @@
-/home/jart/.cache/bazel/_bazel_jart/a233e4cfa495b66524bfaa62f9e360cd/external/eigen_archive/unsupported/Eigen/CXX11/CMakeLists.txt
+set(Eigen_CXX11_HEADERS Tensor TensorSymmetry ThreadPool)
+
+install(FILES
+  ${Eigen_CXX11_HEADERS}
+  DESTINATION ${INCLUDE_INSTALL_DIR}/unsupported/Eigen/CXX11 COMPONENT Devel
+  )
+
+install(DIRECTORY src DESTINATION ${INCLUDE_INSTALL_DIR}/unsupported/Eigen/CXX11 COMPONENT Devel FILES_MATCHING PATTERN "*.h")

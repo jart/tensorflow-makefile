@@ -1,1 +1,5 @@
-/home/jart/.cache/bazel/_bazel_jart/a233e4cfa495b66524bfaa62f9e360cd/external/local_config_git/gen/spec.json
+{
+  "git": true,
+  "path": "/home/jart/.cache/bazel/_bazel_jart/a233e4cfa495b66524bfaa62f9e360cd/external/org_tensorflow/",
+  "branch": "refs/heads/r1.10"
+}

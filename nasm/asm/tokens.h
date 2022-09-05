@@ -1,1 +1,11 @@
-/home/jart/.cache/bazel/_bazel_jart/a233e4cfa495b66524bfaa62f9e360cd/external/nasm/asm/tokens.h
+/*
+ * This file is generated from insns.dat, regs.dat and token.dat
+ * by tokhash.pl; do not edit.
+ */
+
+#ifndef NASM_TOKENS_H
+#define NASM_TOKENS_H
+
+#define MAX_KEYWORD 16 /* length of longest keyword */
+
+#endif /* NASM_TOKENS_H */

@@ -1,1 +1,5 @@
-/home/jart/.cache/bazel/_bazel_jart/a233e4cfa495b66524bfaa62f9e360cd/external/jemalloc/include/jemalloc/internal/private_namespace.sh
+#!/bin/sh
+
+for symbol in `cat $1` ; do
+  echo "#define	${symbol} JEMALLOC_N(${symbol})"
+done

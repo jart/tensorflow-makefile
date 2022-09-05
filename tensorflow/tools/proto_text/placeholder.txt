@@ -1,1 +1,1 @@
-/home/jart/tensorflow/tensorflow/tools/proto_text/placeholder.txt
+Contents are unused. See gen_proto_functions.cc for details.

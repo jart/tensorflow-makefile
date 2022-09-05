@@ -1,1 +1,27 @@
-/home/jart/.cache/bazel/_bazel_jart/a233e4cfa495b66524bfaa62f9e360cd/external/jpeg/simd/jdct.inc
+;
+; jdct.inc - private declarations for forward & reverse DCT subsystems
+;
+; Copyright 2009 Pierre Ossman <ossman@cendio.se> for Cendio AB
+;
+; Based on the x86 SIMD extension for IJG JPEG library
+; Copyright (C) 1999-2006, MIYASAKA Masaru.
+; For conditions of distribution and use, see copyright notice in jsimdext.inc
+;
+; [TAB8]
+
+; Each IDCT routine is responsible for range-limiting its results and
+; converting them to unsigned form (0..MAXJSAMPLE).  The raw outputs could
+; be quite far out of range if the input data is corrupt, so a bulletproof
+; range-limiting step is required.  We use a mask-and-table-lookup method
+; to do the combined operations quickly.
+;
+%define RANGE_MASK  (MAXJSAMPLE * 4 + 3)  ; 2 bits wider than legal samples
+
+%define ROW(n,b,s)              ((b)+(n)*(s))
+%define COL(n,b,s)              ((b)+(n)*(s)*DCTSIZE)
+
+%define DWBLOCK(m,n,b,s)        ((b)+(m)*DCTSIZE*(s)+(n)*SIZEOF_DWORD)
+%define MMBLOCK(m,n,b,s)        ((b)+(m)*DCTSIZE*(s)+(n)*SIZEOF_MMWORD)
+%define XMMBLOCK(m,n,b,s)       ((b)+(m)*DCTSIZE*(s)+(n)*SIZEOF_XMMWORD)
+
+; --------------------------------------------------------------------------

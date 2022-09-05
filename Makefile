@@ -23,6 +23,8 @@
 #             /:::.    `\
 # blakefiler -c opt //tensorflow/core:lib //tensorflow/core:protos_all_cc //tensorflow/core:framework_lite //tensorflow/core:ops //tensorflow/core:framework
 
+.UNSANDBOXED = 1
+
 COMPILATION_MODE = opt
 TARGET_CPU = k8
 ANDROID_CPU = armeabi
@@ -398,14 +400,12 @@ tensorflow_core_lib_hash_crc32c_accelerate_internal_LINK = \
 	blake-bin/tensorflow/core/liblib_hash_crc32c_accelerate_internal.so
 
 blake-bin/tensorflow/core/_objs/lib_hash_crc32c_accelerate_internal/%.pic.o: \
-		tensorflow/core/%.cc \
-		
+		tensorflow/core/%.cc
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS.security) $(tensorflow_core_lib_hash_crc32c_accelerate_internal_CFLAGS) $(CXXFLAGS) $(CPPFLAGS.security)  $(CPPFLAGS) -iquote . $(FPIC) $(TARGET_ARCH) -c -o $@ $<
 
 blake-bin/tensorflow/core/_objs/lib_hash_crc32c_accelerate_internal/%.o: \
-		tensorflow/core/%.cc \
-		
+		tensorflow/core/%.cc
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS.security) $(tensorflow_core_lib_hash_crc32c_accelerate_internal_CFLAGS) $(CXXFLAGS) $(CPPFLAGS.security)  $(FPIE) $(CPPFLAGS) -iquote . $(TARGET_ARCH) -c -o $@ $<
 
